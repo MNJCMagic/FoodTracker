@@ -9,11 +9,16 @@
 import UIKit
 import os.log
 
-class Meal: NSObject, NSCoding {
+class Meal: NSObject {
     
-    var name: String
-    var photo: UIImage?
-    var rating: Int
+    var name: String?
+    var photoPath: String?
+    var rating: Int?
+    var calories: Int?
+    var mealDescription: String?
+    var id: Int?
+    //var userId: Int
+    
     
     //MARK: Archiving Paths
     
@@ -29,29 +34,31 @@ class Meal: NSObject, NSCoding {
     }
     
     //MARK: Initialization
-    init?(name: String, photo: UIImage?, rating: Int) {
+    init?(name: String, rating: Int, calories: Int, mealDescription: String, id: Int) {
         if name.isEmpty || rating < 0 {
             return nil
         }
         self.name = name
-        self.photo = photo
         self.rating = rating
+        self.calories = calories
+        self.mealDescription = mealDescription
+        self.id = id
     }
     
     //MARK: NSCoding
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: PropertyKey.name)
-        aCoder.encode(photo, forKey: PropertyKey.photo)
-        aCoder.encode(rating, forKey: PropertyKey.rating)
-    }
-    
-    required convenience init?(coder aDecoder: NSCoder) {
-        guard let name = aDecoder.decodeObject(forKey: PropertyKey.name) as? String else {
-            os_log("Unable to decode the name for a Meal object.", log: OSLog.default, type: .debug)
-            return nil
-        }
-        let photo = aDecoder.decodeObject(forKey: PropertyKey.photo) as? UIImage
-        let rating = aDecoder.decodeInteger(forKey: PropertyKey.rating)
-        self.init(name: name, photo: photo, rating: rating)
-    }
+//    func encode(with aCoder: NSCoder) {
+//        aCoder.encode(name, forKey: PropertyKey.name)
+//        aCoder.encode(photo, forKey: PropertyKey.photo)
+//        aCoder.encode(rating, forKey: PropertyKey.rating)
+//    }
+//
+//    required convenience init?(coder aDecoder: NSCoder) {
+//        guard let name = aDecoder.decodeObject(forKey: PropertyKey.name) as? String else {
+//            os_log("Unable to decode the name for a Meal object.", log: OSLog.default, type: .debug)
+//            return nil
+//        }
+//        let photo = aDecoder.decodeObject(forKey: PropertyKey.photo) as? UIImage
+//        let rating = aDecoder.decodeInteger(forKey: PropertyKey.rating)
+//        self.init(name: name, photo: photo, rating: rating)
+//    }
 }

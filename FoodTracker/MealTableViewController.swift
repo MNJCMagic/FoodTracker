@@ -14,22 +14,32 @@ class MealTableViewController: UITableViewController {
     //MARK: Properties
     
     var meals = [Meal]()
+    var networkManager: NetworkManager?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        networkManager = NetworkManager()
+        networkManager!.getMeals(completion: { (data, error) -> (Void) in
+            self.meals = self.networkManager!.makeMeals(data: data!)
+            print("\(self.meals)")
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        })
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         navigationItem.leftBarButtonItem = editButtonItem
-        if let savedMeals = loadMeals() {
-            meals += savedMeals
-        } else {
-            loadSampleMeals()
-        }
+//        if let savedMeals = loadMeals() {
+//            meals += savedMeals
+//        } else {
+//            loadSampleMeals()
+//        }
+        //MARK: USER DEFAULTS
 
 
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -51,8 +61,8 @@ class MealTableViewController: UITableViewController {
         }
         let meal = meals[indexPath.row]
         cell.nameLabel.text = meal.name
-        cell.photoImageView.image = meal.photo
-        cell.ratingControl.rating = meal.rating
+        //cell.photoImageView.image = meal.photo
+        cell.ratingControl.rating = meal.rating!
         
 
         
@@ -119,6 +129,7 @@ class MealTableViewController: UITableViewController {
             }
             let selectedMeal = meals[indexPath.row]
             mealDetailViewController.meal = selectedMeal
+            mealDetailViewController.networkManager = self.networkManager
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier ?? "")")
 
@@ -145,24 +156,24 @@ class MealTableViewController: UITableViewController {
     
     //MARK: Private methods
     
-    private func loadSampleMeals() {
-        let photo1 = UIImage(named: "meal1")
-        let photo2 = UIImage(named: "meal2")
-        let photo3 = UIImage(named: "meal3")
-        
-        guard let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4) else {
-            fatalError("Unable to instantiate meal1")
-        }
-        
-        guard let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5) else {
-            fatalError("Unable to instantiate meal2")
-        }
-        
-        guard let meal3 = Meal(name: "Pasta with Meatballs", photo: photo3, rating: 3) else {
-            fatalError("Unable to instantiate meal2")
-        }
-        meals += [meal1, meal2, meal3]
-        }
+//    private func loadSampleMeals() {
+//        let photo1 = UIImage(named: "meal1")
+//        let photo2 = UIImage(named: "meal2")
+//        let photo3 = UIImage(named: "meal3")
+//
+//        guard let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4) else {
+//            fatalError("Unable to instantiate meal1")
+//        }
+//
+//        guard let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5) else {
+//            fatalError("Unable to instantiate meal2")
+//        }
+//
+//        guard let meal3 = Meal(name: "Pasta with Meatballs", photo: photo3, rating: 3) else {
+//            fatalError("Unable to instantiate meal2")
+//        }
+//        meals += [meal1, meal2, meal3]
+//        }
     
     private func saveMeals() {
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)

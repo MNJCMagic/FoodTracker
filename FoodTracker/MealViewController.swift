@@ -18,16 +18,18 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var meal: Meal?
+    var networkManager: NetworkManager?
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         nameTextField.delegate = self
+        
         if let meal = meal {
             navigationItem.title = meal.name
             nameTextField.text   = meal.name
-            photoImageView.image = meal.photo
-            ratingControl.rating = meal.rating
+            //photoImageView.image = meal.photo
+            ratingControl.rating = meal.rating!
         }
         updateSaveButtonState()
     }
@@ -73,19 +75,25 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        guard let button = sender as? UIBarButtonItem, button === saveButton else {
-            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
-            return
-            
-        }
-        let name = nameTextField.text ?? ""
-        let photo = photoImageView.image
-        let rating = ratingControl.rating
-        meal = Meal(name: name, photo: photo, rating: rating)
-        
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        super.prepare(for: segue, sender: sender)
+//        guard let button = sender as? UIBarButtonItem, button === saveButton else {
+//            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
+//            return
+//            
+//        }
+//        let name = nameTextField.text ?? ""
+//        //let photo = photoImageView.image
+//        let rating = ratingControl.rating
+//        meal = Meal(name: name, mealDescription: <#String#>, rating: rating)
+//        //let error = NSError()
+//        saveMeal(meal: meal!) { (error) -> (Void) in
+//            if error != nil {
+//                print("error")
+//            }
+//        }
+//        
+//    }
     
     
     //MARK: Actions
@@ -103,6 +111,13 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     private func updateSaveButtonState() {
         let text = nameTextField.text ?? ""
         saveButton.isEnabled = !text.isEmpty
+    }
+    
+    //MARK: save meal
+    func saveMeal(meal: Meal, completion: (NSError?)-> (Void)) {
+        networkManager?.post(data: ["" : "" as AnyObject], toEndpoint: "", completion: { (data, error) -> (Void) in
+            
+        })
     }
     
 }

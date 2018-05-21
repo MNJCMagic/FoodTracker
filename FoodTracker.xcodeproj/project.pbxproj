@@ -17,6 +17,7 @@
 		27415C1120B0AE1B0035C63B /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27415C1020B0AE1B0035C63B /* Meal.swift */; };
 		27415C1320B0B0770035C63B /* MealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27415C1220B0B0770035C63B /* MealTableViewCell.swift */; };
 		27415C1520B0B3960035C63B /* MealTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27415C1420B0B3960035C63B /* MealTableViewController.swift */; };
+		27415C6620B324B40035C63B /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27415C6520B324B40035C63B /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		27415C1020B0AE1B0035C63B /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		27415C1220B0B0770035C63B /* MealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTableViewCell.swift; sourceTree = "<group>"; };
 		27415C1420B0B3960035C63B /* MealTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTableViewController.swift; sourceTree = "<group>"; };
+		27415C6520B324B40035C63B /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				27415C0E20AF739A0035C63B /* RatingControl.swift */,
 				27415C1020B0AE1B0035C63B /* Meal.swift */,
 				27415C1420B0B3960035C63B /* MealTableViewController.swift */,
+				27415C6520B324B40035C63B /* NetworkManager.swift */,
 				27415C1220B0B0770035C63B /* MealTableViewCell.swift */,
 				27415BF220AF43C90035C63B /* Main.storyboard */,
 				27415BF520AF43CA0035C63B /* Assets.xcassets */,
@@ -212,6 +215,7 @@
 				27415C1120B0AE1B0035C63B /* Meal.swift in Sources */,
 				27415BF120AF43C90035C63B /* MealViewController.swift in Sources */,
 				27415C0F20AF739A0035C63B /* RatingControl.swift in Sources */,
+				27415C6620B324B40035C63B /* NetworkManager.swift in Sources */,
 				27415BEF20AF43C90035C63B /* AppDelegate.swift in Sources */,
 				27415C1520B0B3960035C63B /* MealTableViewController.swift in Sources */,
 				27415C1320B0B0770035C63B /* MealTableViewCell.swift in Sources */,
