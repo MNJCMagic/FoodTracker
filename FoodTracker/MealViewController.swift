@@ -12,7 +12,8 @@ import os.log
 class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     //MARK: Properties
     @IBOutlet weak var nameTextField: UITextField!
-
+    @IBOutlet weak var descriptionTextField: UITextField!
+    @IBOutlet weak var caloriesTextField: UITextField!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -74,26 +75,32 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         }
     }
     
+    @IBAction func saveButton(_ sender: Any) {
+        let name = nameTextField.text ?? ""
+        let rating = ratingControl.rating
+        let mealDescription = descriptionTextField.text ?? ""
+        let calories = Int(caloriesTextField.text!) ?? 0
+        meal = Meal(name: name, calories: calories, rating: rating, mealDescription: mealDescription, id: nil)
+        saveMeal(meal: meal!) { (error) -> (Void) in
+            if error != nil {
+                print("error")
+            }
+
+            
+        }
+        
+    }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        super.prepare(for: segue, sender: sender)
-//        guard let button = sender as? UIBarButtonItem, button === saveButton else {
-//            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
-//            return
-//            
-//        }
-//        let name = nameTextField.text ?? ""
-//        //let photo = photoImageView.image
-//        let rating = ratingControl.rating
-//        meal = Meal(name: name, mealDescription: <#String#>, rating: rating)
-//        //let error = NSError()
-//        saveMeal(meal: meal!) { (error) -> (Void) in
-//            if error != nil {
-//                print("error")
-//            }
-//        }
-//        
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        guard let button = sender as? UIBarButtonItem, button === saveButton else {
+            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
+            return
+            
+        }
+
+        
+    }
     
     
     //MARK: Actions
@@ -114,9 +121,24 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     //MARK: save meal
-    func saveMeal(meal: Meal, completion: (NSError?)-> (Void)) {
-        networkManager?.post(data: ["" : "" as AnyObject], toEndpoint: "", completion: { (data, error) -> (Void) in
+    func saveMeal(meal: Meal, completion: @escaping (Error?)-> (Void)) {
+        //let mealArray = [meal]
+        self.networkManager!.post(meal: meal, completion: { (data, error) -> (Void) in
+            let meal = self.networkManager?.getID(data: data!)
+            let id = meal?.id
+            let rating = self.ratingControl.rating
+            self.networkManager!.adjustRating(rating: rating, id: id!, completion: { (error) -> (Void) in
+                if error != nil {
+                    //FAIL
+                    print("\(error!.localizedDescription)")
+                }
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "unwindSegue", sender: nil)
+                }
+                completion(error)
+            })
             
+            completion(error)
         })
     }
     

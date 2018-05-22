@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="c2F-y9-UXt">
-                                <rect key="frame" x="0.0" y="84" width="375" height="410"/>
+                                <rect key="frame" x="0.0" y="84" width="375" height="486"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter meal name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lko-dw-B1V">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
@@ -27,8 +27,20 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter meal description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JKD-Ec-gtx" userLabel="Description Text Field">
+                                        <rect key="frame" x="0.0" y="38" width="375" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter meal calories" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7uU-Ml-M6V">
+                                        <rect key="frame" x="0.0" y="76" width="375" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                     <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="EqP-ZU-vd2">
-                                        <rect key="frame" x="27.5" y="38" width="320" height="320"/>
+                                        <rect key="frame" x="27.5" y="114" width="320" height="320"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="320" id="XmQ-hh-gcH"/>
@@ -39,7 +51,7 @@
                                         </connections>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2cT-CE-1Wj" userLabel="Rating Control" customClass="RatingControl" customModule="FoodTracker" customModuleProvider="target">
-                                        <rect key="frame" x="61.5" y="366" width="252" height="44"/>
+                                        <rect key="frame" x="61.5" y="442" width="252" height="44"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="starCount">
                                                 <integer key="value" value="5"/>
@@ -48,7 +60,11 @@
                                     </stackView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="JKD-Ec-gtx" secondAttribute="trailing" id="B2w-cd-Fde"/>
+                                    <constraint firstItem="7uU-Ml-M6V" firstAttribute="leading" secondItem="c2F-y9-UXt" secondAttribute="leading" id="UPk-Zd-09Z"/>
+                                    <constraint firstAttribute="trailing" secondItem="7uU-Ml-M6V" secondAttribute="trailing" id="eQb-HQ-8kq"/>
                                     <constraint firstAttribute="trailing" secondItem="lko-dw-B1V" secondAttribute="trailing" id="i43-bu-d1B"/>
+                                    <constraint firstItem="JKD-Ec-gtx" firstAttribute="leading" secondItem="c2F-y9-UXt" secondAttribute="leading" id="zdV-IA-hxt"/>
                                 </constraints>
                             </stackView>
                         </subviews>
@@ -68,15 +84,18 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="C64-id-BjF">
                             <connections>
-                                <segue destination="dz5-iO-D01" kind="unwind" unwindAction="unwindToMealListWithSender:" id="HlW-py-470"/>
+                                <action selector="saveButton:" destination="BYZ-38-t0r" id="AtC-rJ-o0R"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="caloriesTextField" destination="7uU-Ml-M6V" id="Ox3-wc-kCQ"/>
+                        <outlet property="descriptionTextField" destination="JKD-Ec-gtx" id="L8y-4k-Igc"/>
                         <outlet property="nameTextField" destination="lko-dw-B1V" id="Wjn-iz-a9f"/>
                         <outlet property="photoImageView" destination="EqP-ZU-vd2" id="Oj2-DH-90R"/>
                         <outlet property="ratingControl" destination="2cT-CE-1Wj" id="UDo-G8-vsl"/>
                         <outlet property="saveButton" destination="C64-id-BjF" id="tNc-WS-rMx"/>
+                        <segue destination="dz5-iO-D01" kind="unwind" identifier="unwindSegue" unwindAction="unwindToMealListWithSender:" id="nKF-jN-PYB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -143,6 +162,7 @@
                     <navigationItem key="navigationItem" title="Your Meals" id="Irc-sB-Pot">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="sMD-3l-7bd">
                             <connections>
+                                <action selector="addNewButton:" destination="v1o-rM-oVG" id="Phs-H9-HRH"/>
                                 <segue destination="3QC-fg-Pbc" kind="presentation" identifier="AddItem" id="ysd-wX-AK6"/>
                             </connections>
                         </barButtonItem>

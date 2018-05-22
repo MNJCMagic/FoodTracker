@@ -11,11 +11,11 @@ import os.log
 
 class Meal: NSObject {
     
-    var name: String?
+    var name: String
     var photoPath: String?
     var rating: Int?
-    var calories: Int?
-    var mealDescription: String?
+    var calories: Int
+    var mealDescription: String
     var id: Int?
     //var userId: Int
     
@@ -34,8 +34,8 @@ class Meal: NSObject {
     }
     
     //MARK: Initialization
-    init?(name: String, rating: Int, calories: Int, mealDescription: String, id: Int) {
-        if name.isEmpty || rating < 0 {
+    init?(name: String, calories: Int, rating: Int?, mealDescription: String, id: Int?) {
+        if name.isEmpty {
             return nil
         }
         self.name = name

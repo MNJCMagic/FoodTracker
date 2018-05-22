@@ -20,13 +20,13 @@ class NetworkManager: NSObject {
         return myURLComponents
     }
 
-    func post(data: [String: AnyObject], toEndpoint: String, completion: (NSData?, NSError?)->(Void)) {
+    func post(meal: Meal, completion: @escaping (Data?, Error?)->(Void)) {
         
         //URL components
         var myURLComponents = self.makeComponents()
-        let titleQueryToken = URLQueryItem(name: "title", value: "apple")
-        let descriptionQueryToken = URLQueryItem(name: "description", value: "golden yellow")
-        let caloriesQueryToken = URLQueryItem(name: "calories", value: "50")
+        let titleQueryToken = URLQueryItem(name: "title", value: meal.name)
+        let descriptionQueryToken = URLQueryItem(name: "description", value: meal.mealDescription)
+        let caloriesQueryToken = URLQueryItem(name: "calories", value: String(meal.calories))
         myURLComponents.queryItems = [titleQueryToken, descriptionQueryToken, caloriesQueryToken]
         
         //url
@@ -48,15 +48,45 @@ class NetworkManager: NSObject {
                 //success
                 let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode)")
+                completion(data, error)
             } else {
                 //failure
                 print("URL Session Task Failed: %@", error!.localizedDescription)
             }
+            completion(data, error)
         }
         task.resume()
         session.finishTasksAndInvalidate()
         }
     
+    func adjustRating(rating: Int, id: Int, completion: @escaping (Error?) -> (Void)) -> (Void) {
+        var myURLComponents = URLComponents()
+        myURLComponents.scheme = "https"
+        myURLComponents.host = "cloud-tracker.herokuapp.com"
+        myURLComponents.path = "/users/me/meals/\(id)/rate"
+        let stringRating = String(rating)
+        let ratingQueryToken = URLQueryItem(name: "rating", value: stringRating)
+        myURLComponents.queryItems = [ratingQueryToken]
+        
+        let url = myURLComponents.url
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let token = UserDefaults.standard.value(forKey: "token") as! String
+        request.addValue(token, forHTTPHeaderField: "token")
+        
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            completion(error)
+        }
+        
+        task.resume()
+        session.finishTasksAndInvalidate()
+        
+    }
     
     
     func getMeals(completion: @escaping (Data?, Error?) -> (Void)) -> (Void) {
@@ -109,17 +139,40 @@ class NetworkManager: NSObject {
         }
         var meals: [Meal] = []
         for i in 0..<mealData.count {
-    
-            let title = mealData[i]["title"] as! String
-            let calories = mealData[i]["calories"] as! Int
-            let mealDescription = mealData[i]["description"] as! String
-            let id = mealData[i]["id"] as! Int
-            let rating = mealData[i]["rating"] as! Int
+
             let photoURL = mealData[i]["imagePath"] as? String
-            let meal = Meal(name: title, rating: rating, calories: calories, mealDescription: mealDescription, id: id)!
-            meal.photoPath = photoURL
-            meals.append(meal)
+            let meal = Meal(name: mealData[i]["title"] as? String ?? "",
+                            calories: mealData[i]["calories"] as? Int ?? 0,
+                            rating: mealData[i]["rating"] as? Int ?? 0,
+                            mealDescription: (mealData[i]["description"] as? String)!,
+                            id: mealData[i]["id"] as? Int ?? 0
+                            )
+            meal!.photoPath = photoURL
+            meals.append(meal!)
             }
         return meals
         }
+    
+    func getID(data: Data) -> Meal? {
+        var json: Dictionary<String,Any?>?
+        do {
+            json = (try JSONSerialization.jsonObject(with: data) as? [String: Any])!
+        } catch {
+            print(#line, error.localizedDescription)
+        }
+        guard let mealData = json, let mealJSON =  mealData["meal"] as? Dictionary<String,Any> else {
+            print("error parsing single meal")
+            return nil
+        }
+        let meal = Meal(name: mealJSON["title"] as? String ?? "",
+                        calories: mealJSON["calories"] as? Int ?? 0,
+                        rating: mealJSON["rating"] as? Int ?? 0,
+                        mealDescription: (mealJSON["description"] as? String)!,
+                        id: mealJSON["id"] as? Int ?? 0
+        )
+        return meal
+    }
+    
+
+    
 }

@@ -111,12 +111,18 @@ class MealTableViewController: UITableViewController {
     
     // MARK: - Navigation
 
-
+    @IBAction func addNewButton(_ sender: Any) {
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         switch(segue.identifier ?? "") {
         case "AddItem":
             os_log("Adding a new meal.", log: OSLog.default, type: .debug)
+            let nav = segue.destination as! UINavigationController
+            let mealViewController = nav.topViewController as! MealViewController
+            mealViewController.networkManager = self.networkManager
+//            mealViewController.networkManager = self.networkManager
         case "ShowDetail":
             guard let mealDetailViewController = segue.destination as? MealViewController else {
                 fatalError("unexpected sender: \(sender ?? "")")
@@ -129,7 +135,7 @@ class MealTableViewController: UITableViewController {
             }
             let selectedMeal = meals[indexPath.row]
             mealDetailViewController.meal = selectedMeal
-            mealDetailViewController.networkManager = self.networkManager
+            //mealDetailViewController.networkManager = self.networkManager
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier ?? "")")
 
@@ -140,17 +146,18 @@ class MealTableViewController: UITableViewController {
     //MARK: Actions
     
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.source as? MealViewController, let meal = sourceViewController.meal {
-            if let selectedIndexPath = tableView.indexPathForSelectedRow {
-                meals[selectedIndexPath.row] = meal
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
-            } else {
-                let newIndexPath = IndexPath(row: meals.count, section: 0)
-                meals.append(meal)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
-            }
-            saveMeals()
-        }
+        self.tableView.reloadData()
+//        if let sourceViewController = sender.source as? MealViewController, let meal = sourceViewController.meal {
+//            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+//                meals[selectedIndexPath.row] = meal
+//                tableView.reloadRows(at: [selectedIndexPath], with: .none)
+//            } else {
+//                let newIndexPath = IndexPath(row: meals.count, section: 0)
+//                meals.append(meal)
+//                tableView.insertRows(at: [newIndexPath], with: .automatic)
+//            }
+//            saveMeals()
+//        }
     }
     
     
