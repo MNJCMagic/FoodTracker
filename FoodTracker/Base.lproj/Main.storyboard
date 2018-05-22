@@ -188,7 +188,61 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E8B-Dh-GpI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-818.39999999999998" y="116.49175412293854"/>
+            <point key="canvasLocation" x="-1732" y="116"/>
+        </scene>
+        <!--Sign Up View Controller-->
+        <scene sceneID="q6H-Zk-zbQ">
+            <objects>
+                <viewController storyboardIdentifier="SignUpViewController" id="0rc-EN-vHP" customClass="SignUpViewController" customModule="FoodTracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Qoi-2i-cIU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="UserName" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Y5-RT-tPV">
+                                <rect key="frame" x="16" y="236" width="343" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="343" id="EhI-JU-sPW"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PNG-hO-T5m">
+                                <rect key="frame" x="16" y="284" width="343" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="343" id="XOk-cM-XF4"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asS-6p-eyV">
+                                <rect key="frame" x="150" y="333" width="55" height="30"/>
+                                <state key="normal" title="Sign Up"/>
+                                <connections>
+                                    <action selector="signUpButtonClicked" destination="0rc-EN-vHP" eventType="touchUpInside" id="J2x-Oo-eyw"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="8Y5-RT-tPV" firstAttribute="leading" secondItem="V7r-da-gH2" secondAttribute="leading" constant="16" id="BP7-Mc-aZs"/>
+                            <constraint firstItem="asS-6p-eyV" firstAttribute="leading" secondItem="V7r-da-gH2" secondAttribute="leading" constant="150" id="aq8-fq-Zs6"/>
+                            <constraint firstItem="8Y5-RT-tPV" firstAttribute="top" secondItem="V7r-da-gH2" secondAttribute="top" constant="216" id="cRF-e3-8fa"/>
+                            <constraint firstItem="PNG-hO-T5m" firstAttribute="top" secondItem="8Y5-RT-tPV" secondAttribute="bottom" constant="18" id="oRu-1e-fTn"/>
+                            <constraint firstItem="asS-6p-eyV" firstAttribute="top" secondItem="PNG-hO-T5m" secondAttribute="bottom" constant="19" id="re6-7K-ehu"/>
+                            <constraint firstItem="PNG-hO-T5m" firstAttribute="leading" secondItem="V7r-da-gH2" secondAttribute="leading" constant="16" id="vI1-Ba-x6e"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="V7r-da-gH2"/>
+                    </view>
+                    <connections>
+                        <outlet property="passwordTextField" destination="PNG-hO-T5m" id="dKU-c8-Hsa"/>
+                        <outlet property="userNameTextField" destination="8Y5-RT-tPV" id="FMt-i4-ncx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kMi-zG-EjR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-930.39999999999998" y="-506.89655172413796"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bR8-9y-NRu">

@@ -19,6 +19,40 @@ class NetworkManager: NSObject {
         myURLComponents.path = "/users/me/meals"
         return myURLComponents
     }
+    
+    func signUp(username: String, password: String, completion: @escaping (Data? ,Error?)->(Void)) -> (Void) {
+        var myURLComponents = self.makeComponents()
+        myURLComponents.path = "/signup"
+        let usernameQueryToken = URLQueryItem(name: "username", value: username)
+        let passwordQueryToken = URLQueryItem(name: "password", value: password)
+        myURLComponents.queryItems = [usernameQueryToken, passwordQueryToken]
+        
+        let url = myURLComponents.url
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        //Task and session
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        
+        let task = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+            if (error == nil) {
+                //success
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                completion(data, error)
+            } else {
+                //failure
+                print("URL Session Task Failed: %@", error!.localizedDescription)
+            }
+            completion(data, error)
+        }
+        task.resume()
+        session.finishTasksAndInvalidate()
+    }
+    
 
     func post(meal: Meal, completion: @escaping (Data?, Error?)->(Void)) {
         
@@ -171,6 +205,24 @@ class NetworkManager: NSObject {
                         id: mealJSON["id"] as? Int ?? 0
         )
         return meal
+    }
+    
+    func getToken(data: Data) {
+        var json: Dictionary<String,Any> = [:]
+        do {
+            json = try JSONSerialization.jsonObject(with: data) as! [String:Any]
+        } catch {
+            print(#line, error.localizedDescription)
+        }
+        let userData = json
+        let token = userData["token"] as! String
+        let username = userData["username"] as! String
+        let password = userData["password"] as! String
+        UserDefaults.standard.set(token, forKey: "token")
+        UserDefaults.standard.set(username, forKey: "username")
+        UserDefaults.standard.set(password, forKey: "password")
+        UserDefaults.standard.synchronize()
+
     }
     
 

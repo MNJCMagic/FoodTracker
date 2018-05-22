@@ -17,7 +17,14 @@ class MealTableViewController: UITableViewController {
     var networkManager: NetworkManager?
     
     override func viewWillAppear(_ animated: Bool) {
-        networkManager = NetworkManager()
+        self.networkManager = NetworkManager()
+        if UserDefaults.standard.value(forKey: "username") == nil {
+            let viewController = self.storyboard?.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
+            viewController.networkManager = self.networkManager
+            //self.navigationController?.setViewControllers([viewController], animated: false)
+            self.present(viewController, animated: true, completion: nil)
+        }
+        if UserDefaults.standard.value(forKey: "token") != nil {
         networkManager!.getMeals(completion: { (data, error) -> (Void) in
             self.meals = self.networkManager!.makeMeals(data: data!)
             print("\(self.meals)")
@@ -25,20 +32,16 @@ class MealTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         })
-        
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.leftBarButtonItem = editButtonItem
-//        if let savedMeals = loadMeals() {
-//            meals += savedMeals
-//        } else {
-//            loadSampleMeals()
-//        }
-        //MARK: USER DEFAULTS
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
 
     }
 
